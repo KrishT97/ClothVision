@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 
 
 class EarlyStopper:
-    def __init__(self, patience=0, min_delta=0.1):
+    def __init__(self, patience=2, min_delta=0.1):
         self.patience = patience
         self.min_delta = min_delta
         self.counter = 0
@@ -54,7 +54,7 @@ class ModelTrainer:
             # Make predictions for this batch
             outputs = self.model(inputs).to(self.device)
             # Compute the loss and its gradients
-            loss = self.loss_fn(outputs, labels)
+            loss = self.loss_fn(outputs, torch.argmax(labels, dim=1))
             loss.backward()
             # Adjust learning weights
             self.optimizer.step()
@@ -62,9 +62,10 @@ class ModelTrainer:
             self.optimizer.zero_grad()
             # Gather data and report
             running_loss += loss.item()
-            acc_sum += (outputs.argmax(1) == labels).type(torch.float).sum().item()
+            acc_sum += (outputs.argmax(1) == torch.argmax(labels, dim=1)).type(torch.float).sum().item() / (512 * 224)
+
         train_loss = running_loss / len(training_loader)  # perdida media de la época por batch
-        acc = 100 * acc_sum / len(training_loader.dataset)  # acc media de la época
+        acc = 100 * (acc_sum / len(training_loader.dataset))  # acc media de la época
         return train_loss, acc
 
     def validate(self, val_loader):
@@ -74,8 +75,9 @@ class ModelTrainer:
             for inputs, labels in val_loader:
                 inputs, labels = inputs.to(self.device), labels.to(self.device)
                 outputs = self.model(inputs)
-                val_loss += self.loss_fn(outputs, labels).item()
-                correct += (outputs.argmax(1) == labels).type(torch.float).sum().item()
+                val_loss += self.loss_fn(outputs, torch.argmax(labels, dim=1)).item()
+                correct += (outputs.argmax(1) == torch.argmax(labels, dim=1)).type(torch.float).sum().item() / (
+                            512 * 224)
         val_loss /= len(val_loader)
         val_acc = 100 * correct / len(val_loader.dataset)
         return val_loss, val_acc
@@ -110,14 +112,12 @@ class ModelTrainer:
             for inputs, labels in test_loader:
                 inputs, labels = inputs.to(self.device), labels.to(self.device)
                 outputs = self.model(inputs)
-                test_loss += self.loss_fn(outputs, labels).item()
-                correct += (outputs.argmax(1) == labels).type(torch.float).sum().item()
+                test_loss += self.loss_fn(outputs, torch.argmax(labels, dim=1)).item()
+                correct += (outputs.argmax(1) == torch.argmax(labels, dim=1)).type(torch.float).sum().item() / (
+                            512 * 224)
         test_loss /= len(test_loader)
         test_acc = 100 * correct / len(test_loader.dataset)
         print(f"Test Accuracy: {test_acc:>0.1f}%, Avg loss: {test_loss:>8f} \n")
-
-
-
 
 
 
