@@ -28,7 +28,7 @@ class MobileNetV3Segmentation(nn.Module):
 
         # 1280 canales entrada predefinidos en la última capa, canales especificadas por clases como salida
 
-        self.model.classifier[-1] = nn.Conv2d(1280, num_classes, kernel_size=1)
+        self.model.classifier[-1] = nn.Conv2d(256, num_classes, kernel_size=1)
 
     def forward(self, x):
         return self.model(x)
