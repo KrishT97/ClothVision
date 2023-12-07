@@ -62,7 +62,7 @@ class ModelTrainer:
             self.optimizer.zero_grad()
             # Gather data and report
             running_loss += loss.item()
-            acc_sum += (outputs.argmax(1) == torch.argmax(labels, dim=1)).type(torch.float).sum().item() / (512 * 224)
+            acc_sum += (outputs.argmax(1) == torch.argmax(labels, dim=1)).type(torch.float).sum().item() / (512 * 320)
 
         train_loss = running_loss / len(training_loader)  # perdida media de la época por batch
         acc = 100 * (acc_sum / len(training_loader.dataset))  # acc media de la época
@@ -77,7 +77,7 @@ class ModelTrainer:
                 outputs = self.model(inputs)
                 val_loss += self.loss_fn(outputs, torch.argmax(labels, dim=1)).item()
                 correct += (outputs.argmax(1) == torch.argmax(labels, dim=1)).type(torch.float).sum().item() / (
-                            512 * 224)
+                            512 * 320)
         val_loss /= len(val_loader)
         val_acc = 100 * correct / len(val_loader.dataset)
         return val_loss, val_acc
