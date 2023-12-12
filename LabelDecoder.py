@@ -14,7 +14,7 @@ class LabelDecoder:
 
     def __get_onehot_to_array(self, ):
         array_to_onehot = self.class_dict[["byte_value", "One-hot"]].set_index('byte_value').to_dict()["One-hot"]
-        return {v.tobytes(): k for k, v in array_to_onehot.items()}
+        return {v.tobytes(): np.frombuffer(k, dtype=np.uint8) for k, v in array_to_onehot.items()}
 
     def __get_class_dict_dataframe(self, class_dict_path):
         class_dict = pd.read_csv(class_dict_path)
@@ -29,7 +29,6 @@ class LabelDecoder:
 
     def decode_labels(self, *images):
         result = []
-
         for image in images:
             decoded_image = self.__decode_image(image)
             classes = self.__get_classes(decoded_image)
@@ -37,7 +36,7 @@ class LabelDecoder:
         return result
 
     def __decode_image(self, image):
-        return np.apply_along_axis(lambda pixel: np.frombuffer(self.onehot_to_array[pixel.tobytes()], dtype=np.uint8),
+        return np.apply_along_axis(lambda pixel: self.onehot_to_array[pixel.tobytes()],
                                    0, np.array(image.cpu(), np.uint8)).transpose(1, 2, 0)
 
     def __get_classes(self, decoded):
