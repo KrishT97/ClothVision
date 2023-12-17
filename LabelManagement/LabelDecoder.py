@@ -28,6 +28,8 @@ class LabelDecoder:
         return class_dict
 
     def decode_labels(self, *images):
+        if len(images) == 1:
+            return self.__decode_image(images[0]), self.__get_classes(self.__decode_image(images[0]))
         result = []
         for image in images:
             decoded_image = self.__decode_image(image)
@@ -37,7 +39,7 @@ class LabelDecoder:
 
     def __decode_image(self, image):
         return np.apply_along_axis(lambda pixel: self.onehot_to_array[pixel.tobytes()],
-                                   0, np.array(image.cpu(), np.uint8)).transpose(1, 2, 0)
+                                   0, np.array(image, np.uint8)).transpose(1, 2, 0)
 
     def __get_classes(self, decoded):
         image_df = pd.DataFrame({'array_value': decoded.reshape(-1, 3).tolist()}).drop_duplicates()
