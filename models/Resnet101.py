@@ -18,3 +18,4 @@ class Resnet101(nn.Module):
     def forward(self, x):
         return self.model(x)
 
+print(sum(p.numel() for p in Resnet101(5).parameters() ))
