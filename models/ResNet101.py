@@ -2,9 +2,9 @@ from torch import nn as nn
 from torchvision.models import segmentation as segmentation
 
 
-class Resnet101(nn.Module):
+class ResNet101(nn.Module):
     def __init__(self, num_classes):
-        super(Resnet101, self).__init__()
+        super(ResNet101, self).__init__()
 
         self.model = segmentation.fcn_resnet101(pretrained=True, progress=True)
 

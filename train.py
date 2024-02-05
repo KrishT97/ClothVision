@@ -7,6 +7,9 @@ from torch.utils.data import random_split
 from torchvision import transforms
 from torchvision.transforms import InterpolationMode
 
+from models.MobileNetV3 import MobileNetV3
+from models.ResNet101 import ResNet101
+from models.ResNet50 import ResNet50
 from models.Unet import Unet
 from train_utils.CustomClothingDataset import CustomClothingDataset
 from train_utils.EarlyStopper import EarlyStopper
@@ -74,6 +77,18 @@ def divide_dataset(dataset):
 
 def get_unet_trainer(device, loss_fn, test_loader, train_loader, val_loader):
     return train_model(device, loss_fn, Unet().to(device), test_loader, train_loader, val_loader)
+
+
+def get_mobile_net_v3_trainer(device, loss_fn, test_loader, train_loader, val_loader):
+    return train_model(device, loss_fn, MobileNetV3(59).to(device), test_loader, train_loader, val_loader)
+
+
+def get_resnet_50__trainer(device, loss_fn, test_loader, train_loader, val_loader):
+    return train_model(device, loss_fn, ResNet50(59).to(device), test_loader, train_loader, val_loader)
+
+
+def get_resnet_101_trainer(device, loss_fn, test_loader, train_loader, val_loader):
+    return train_model(device, loss_fn, ResNet101(59).to(device), test_loader, train_loader, val_loader)
 
 
 def train_model(device, loss_fn, model, test_loader, train_loader, val_loader):
