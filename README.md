@@ -146,5 +146,6 @@ as it visualizes different garment types in the same locations and even obscures
 
 ## Authors
 
-_David Cruz Sanchez_ - Data Scientist & Engineer
-_Krish Sadhwani_ - Data Scientist & Engineer
+- _David Cruz Sanchez_ - Data Scientist & Engineer
+
+- _Krish Sadhwani_ - Data Scientist & Engineer
