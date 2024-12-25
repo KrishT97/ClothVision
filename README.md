@@ -143,3 +143,8 @@ Predicted classes: ['none', 'hair', 'skin', 'coat', 'jacket', 'shirt','blouse', 
 
 In Figure 2, changes in lighting conditions appear to pose challenges for the model in accurately predicting clothing types,
 as it visualizes different garment types in the same locations and even obscures certain parts.
+
+## Authors
+
+_David Cruz Sanchez_ - Data Scientist & Engineer
+_Krish Sadhwani_ - Data Scientist & Engineer
